@@ -296,15 +296,6 @@ class TollSignRepository @Inject constructor(
             return true;
         }
 
-        // Temporarily remove these until tolling starts
-        if (trip.startLocationName == "SR 410" && trip.travelDirection == "N") {
-            return true;
-        }
-
-        if (trip.startLocationName == "Stewart Rd" && trip.travelDirection == "N") {
-            return true;
-        }
-
         return false;
 
     }
