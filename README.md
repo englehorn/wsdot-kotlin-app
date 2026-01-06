@@ -11,7 +11,6 @@ Washington State Traveler information provide by The Washington State Department
 * Developed with Android Studio
 
 ## Features
-----------------------------------
 * Traffic Map with statewide traffic cameras and travel alerts.
 * Ferry schedules, alerts, and real-time ferry locations.
 * Mountain pass conditions and weather reports.
@@ -20,7 +19,6 @@ Washington State Traveler information provide by The Washington State Department
 * Amtrak Cascades Train Schedules.
 
 ## Dependencies
-------------
 * [Android Jetpack](https://developer.android.com/jetpack)
 * [Bumptech Glide](https://github.com/bumptech/glide)
 * [Dagger](https://github.com/google/dagger)
@@ -37,13 +35,9 @@ Washington State Traveler information provide by The Washington State Department
 * [Retrofit](https://github.com/square/retrofit)
 
 ## Contributing
-------------
-
 Find a bug? Got an idea? Send us a pull request or open an issue and we'll take a look.
 
 ## License
--------
-
 Copyright (c) 2026 Washington State Department of Transportation
 
 This program is free software: you can redistribute it and/or modify
