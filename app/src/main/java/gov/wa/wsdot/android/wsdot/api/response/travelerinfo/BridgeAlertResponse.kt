@@ -16,6 +16,8 @@ class BridgeAlertResponse (
     val duration: Int,
     @field:SerializedName("EventText")
     val eventText: String,
+    @field:SerializedName("BridgeGroup")
+    val bridgeGroup: String?,
     @field:SerializedName("TravelCenterPriorityId")
     val travelCenterPriorityId: Int,
     @field:SerializedName("LastUpdatedTime")

@@ -38,8 +38,9 @@ class BridgeAlertsFragment : DaggerFragment(), Injectable {
     var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
     var binding by autoCleared<BridgeAlertsFragmentBinding>()
 
-    private var hoodCanalBridgeAdapter by autoCleared<BridgeAlertListAdapter>()
     private var firstAveBridgeAdapter by autoCleared<BridgeAlertListAdapter>()
+    private var aberdeenHoquiamBridgeAdapter by autoCleared<BridgeAlertListAdapter>()
+    private var hoodCanalBridgeAdapter by autoCleared<BridgeAlertListAdapter>()
     private var interstateBridgeAdapter by autoCleared<BridgeAlertListAdapter>()
     private var newBridgeAdapter by autoCleared<BridgeAlertListAdapter>()
 
@@ -109,15 +110,21 @@ class BridgeAlertsFragment : DaggerFragment(), Injectable {
         binding.lifecycleOwner = viewLifecycleOwner
 
         // pass function to be called on adapter item tap and favorite
-        val hoodCanalBridgeAdapter = BridgeAlertListAdapter(dataBindingComponent, appExecutors)
-        { alert -> navigateToAlert(alert) }
-        this.hoodCanalBridgeAdapter = hoodCanalBridgeAdapter
-        binding.hoodCanalBridgeList.adapter = hoodCanalBridgeAdapter
 
         val firstAveBridgeAdapter = BridgeAlertListAdapter(dataBindingComponent, appExecutors)
         { alert -> navigateToAlert(alert) }
         this.firstAveBridgeAdapter = firstAveBridgeAdapter
         binding.firstAveBridgeList.adapter = firstAveBridgeAdapter
+
+        val aberdeenHoquiamBridgeAdapter = BridgeAlertListAdapter(dataBindingComponent, appExecutors)
+        { alert -> navigateToAlert(alert) }
+        this.aberdeenHoquiamBridgeAdapter = aberdeenHoquiamBridgeAdapter
+        binding.aberdeenHoquiamBridgeList.adapter = aberdeenHoquiamBridgeAdapter
+
+        val hoodCanalBridgeAdapter = BridgeAlertListAdapter(dataBindingComponent, appExecutors)
+        { alert -> navigateToAlert(alert) }
+        this.hoodCanalBridgeAdapter = hoodCanalBridgeAdapter
+        binding.hoodCanalBridgeList.adapter = hoodCanalBridgeAdapter
 
         val interstateBridgeAdapter = BridgeAlertListAdapter(dataBindingComponent, appExecutors)
         { alert -> navigateToAlert(alert) }
@@ -131,12 +138,17 @@ class BridgeAlertsFragment : DaggerFragment(), Injectable {
 
         // animations
         postponeEnterTransition()
-        binding.hoodCanalBridgeList.viewTreeObserver
+        binding.firstAveBridgeList.viewTreeObserver
             .addOnPreDrawListener {
                 startPostponedEnterTransition()
                 true
             }
-        binding.firstAveBridgeList.viewTreeObserver
+        binding.aberdeenHoquiamBridgeList.viewTreeObserver
+            .addOnPreDrawListener {
+                startPostponedEnterTransition()
+                true
+            }
+        binding.hoodCanalBridgeList.viewTreeObserver
             .addOnPreDrawListener {
                 startPostponedEnterTransition()
                 true
@@ -154,8 +166,9 @@ class BridgeAlertsFragment : DaggerFragment(), Injectable {
             }
 
         bridgeAlertsViewModel.alerts.observe(viewLifecycleOwner, Observer { alertResource ->
-            val hoodCanalBridgeList: MutableList<BridgeAlert> = mutableListOf()
             val firstAveBridgeList: MutableList<BridgeAlert> = mutableListOf()
+            val aberdeenHoquiamBridgeList: MutableList<BridgeAlert> = mutableListOf()
+            val hoodCanalBridgeList: MutableList<BridgeAlert> = mutableListOf()
             val interstateBridgeList: MutableList<BridgeAlert> = mutableListOf()
             val newBridgeList: MutableList<BridgeAlert> = mutableListOf()
 
@@ -166,6 +179,7 @@ class BridgeAlertsFragment : DaggerFragment(), Injectable {
                 Status.ERROR -> {
                         binding.bridgeLayout.visibility = GONE
                         firstAveBridgeAdapter.submitList(emptyList())
+                        aberdeenHoquiamBridgeAdapter.submitList(emptyList())
                         hoodCanalBridgeAdapter.submitList(emptyList())
                         interstateBridgeAdapter.submitList(emptyList())
                         newBridgeAdapter.submitList(emptyList())
@@ -174,17 +188,9 @@ class BridgeAlertsFragment : DaggerFragment(), Injectable {
                 Status.SUCCESS -> {
                     if (alertResource.data != null) {
                         binding.bridgeLayout.visibility = VISIBLE
+
                         for (bridge in alertResource.data) {
-                            if (bridge.bridge == "Hood Canal Bridge") {
-                                hoodCanalBridgeList.add(bridge)
-                                bridgeAlerts("Hood Canal Bridge", true)
-                            }
-                        }
-                        if (hoodCanalBridgeList.isEmpty()) {
-                            bridgeAlerts("Hood Canal Bridge", false)
-                        }
-                        for (bridge in alertResource.data) {
-                            if (bridge.bridge == "1st Avenue South Bridge") {
+                            if (bridge.bridgeGroup == "1st Avenue South Bridge") {
                                 firstAveBridgeList.add(bridge)
                                 bridgeAlerts("1st Avenue South Bridge", true)
                             }
@@ -192,8 +198,30 @@ class BridgeAlertsFragment : DaggerFragment(), Injectable {
                         if (firstAveBridgeList.isEmpty()) {
                             bridgeAlerts("1st Avenue South Bridge", false)
                         }
+
                         for (bridge in alertResource.data) {
-                            if (bridge.bridge == "Interstate Bridge") {
+
+                            if (bridge.bridgeGroup == "Aberdeen/Hoquiam Bridges") {
+                                aberdeenHoquiamBridgeList.add(bridge)
+                                bridgeAlerts("Aberdeen/Hoquiam Bridges", true)
+                            }
+                        }
+                        if (aberdeenHoquiamBridgeList.isEmpty()) {
+                            bridgeAlerts("Aberdeen/Hoquiam Bridges", false)
+                        }
+
+                        for (bridge in alertResource.data) {
+                            if (bridge.bridgeGroup == "Hood Canal Bridge") {
+                                hoodCanalBridgeList.add(bridge)
+                                bridgeAlerts("Hood Canal Bridge", true)
+                            }
+                        }
+                        if (hoodCanalBridgeList.isEmpty()) {
+                            bridgeAlerts("Hood Canal Bridge", false)
+                        }
+
+                        for (bridge in alertResource.data) {
+                            if (bridge.bridgeGroup == "Interstate Bridge") {
                                 interstateBridgeList.add(bridge)
                                 bridgeAlerts("Interstate Bridge", true)
                             }
@@ -203,7 +231,7 @@ class BridgeAlertsFragment : DaggerFragment(), Injectable {
                         }
 
                         for (bridge in alertResource.data) {
-                            if (bridge.bridge != "Hood Canal Bridge" && bridge.bridge != "1st Avenue South Bridge" && bridge.bridge != "Interstate Bridge") {
+                            if (bridge.bridgeGroup != "1st Avenue South Bridge" && bridge.bridgeGroup != "Aberdeen/Hoquiam Bridges" && bridge.bridgeGroup != "Hood Canal Bridge" && bridge.bridgeGroup != "Interstate Bridge") {
                                 newBridgeList.add(bridge)
                                 bridgeAlerts(bridge.bridge, true)
                                 binding.root.findViewById<View>(R.id.new_bridge_header).visibility = VISIBLE
@@ -215,9 +243,9 @@ class BridgeAlertsFragment : DaggerFragment(), Injectable {
                             binding.root.findViewById<View>(R.id.new_bridge_header).visibility = GONE
 
                         }
-
-                        hoodCanalBridgeAdapter.submitList(hoodCanalBridgeList.sortedByDescending{it.lastUpdatedTime})
                         firstAveBridgeAdapter.submitList(firstAveBridgeList.sortedByDescending{it.lastUpdatedTime})
+                        aberdeenHoquiamBridgeAdapter.submitList(aberdeenHoquiamBridgeList.sortedByDescending{it.lastUpdatedTime})
+                        hoodCanalBridgeAdapter.submitList(hoodCanalBridgeList.sortedByDescending{it.lastUpdatedTime})
                         interstateBridgeAdapter.submitList(interstateBridgeList.sortedByDescending{it.lastUpdatedTime})
                         newBridgeAdapter.submitList(newBridgeList)
 
@@ -225,6 +253,7 @@ class BridgeAlertsFragment : DaggerFragment(), Injectable {
                     else {
                         binding.bridgeLayout.visibility = GONE
                         firstAveBridgeAdapter.submitList(emptyList())
+                        aberdeenHoquiamBridgeAdapter.submitList(emptyList())
                         hoodCanalBridgeAdapter.submitList(emptyList())
                         interstateBridgeAdapter.submitList(emptyList())
                         newBridgeAdapter.submitList(emptyList())
@@ -242,22 +271,26 @@ class BridgeAlertsFragment : DaggerFragment(), Injectable {
 
         if (visible) {
             when (bridge) {
-                "Hood Canal Bridge" -> {
-                    binding.hoodCanalBridgeList.visibility = VISIBLE
-                    binding.hoodCanalBridgeEmptyView.visibility = GONE
-                    binding.hoodCanalBridgeEmptyListView.visibility = GONE
-                }
                 "1st Avenue South Bridge" -> {
                     binding.firstAveBridgeList.visibility = VISIBLE
                     binding.firstAveBridgeEmptyView.visibility = GONE
                     binding.firstAveBridgeEmptyListView.visibility = GONE
+                }
+                "Aberdeen/Hoquiam Bridges" -> {
+                    binding.aberdeenHoquiamBridgeList.visibility = VISIBLE
+                    binding.aberdeenHoquiamBridgeEmptyView.visibility = GONE
+                    binding.aberdeenHoquiamBridgeEmptyListView.visibility = GONE
+                }
+                "Hood Canal Bridge" -> {
+                    binding.hoodCanalBridgeList.visibility = VISIBLE
+                    binding.hoodCanalBridgeEmptyView.visibility = GONE
+                    binding.hoodCanalBridgeEmptyListView.visibility = GONE
                 }
                 "Interstate Bridge" -> {
                     binding.interstateBridgeList.visibility = VISIBLE
                     binding.interstateBridgeEmptyView.visibility = GONE
                     binding.interstateBridgeEmptyListView.visibility = GONE
                 }
-
                 "Bridge Alerts" -> {
                     binding.newBridgeList.visibility = VISIBLE
                     binding.newBridgeEmptyView.visibility = GONE
@@ -266,16 +299,22 @@ class BridgeAlertsFragment : DaggerFragment(), Injectable {
             }
         } else {
             when (bridge) {
+                "1st Avenue South Bridge" -> {
+                    binding.firstAveBridgeEmptyListView.text = getString(R.string.no_bridge_alerts_string)
+                    binding.firstAveBridgeEmptyView.visibility = VISIBLE
+                    binding.firstAveBridgeEmptyListView.visibility = VISIBLE
+                }
+                "Aberdeen/Hoquiam Bridges" -> {
+                    binding.aberdeenHoquiamBridgeEmptyListView.text =
+                        getString(R.string.no_bridge_alerts_string)
+                    binding.aberdeenHoquiamBridgeEmptyView.visibility = VISIBLE
+                    binding.aberdeenHoquiamBridgeEmptyListView.visibility = VISIBLE
+                }
                 "Hood Canal Bridge" -> {
                     binding.hoodCanalBridgeEmptyListView.text =
                         getString(R.string.no_bridge_alerts_string)
                     binding.hoodCanalBridgeEmptyView.visibility = VISIBLE
                     binding.hoodCanalBridgeEmptyListView.visibility = VISIBLE
-                }
-                "1st Avenue South Bridge" -> {
-                    binding.firstAveBridgeEmptyListView.text = getString(R.string.no_bridge_alerts_string)
-                    binding.firstAveBridgeEmptyView.visibility = VISIBLE
-                    binding.firstAveBridgeEmptyListView.visibility = VISIBLE
                 }
                 "Interstate Bridge" -> {
                     binding.interstateBridgeEmptyListView.text =

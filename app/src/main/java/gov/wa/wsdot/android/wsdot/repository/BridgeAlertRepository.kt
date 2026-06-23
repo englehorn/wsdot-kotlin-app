@@ -102,6 +102,7 @@ class BridgeAlertRepository @Inject constructor(
                 alertItem.bridgeLocation.roadName,
                 alertItem.bridgeLocation.direction,
                 alertItem.eventText,
+                alertItem.bridgeGroup,
                 alertItem.travelCenterPriorityId,
                 parseBridgeDate(alertItem.openingTime),
                 alertItem.lastUpdatedTime?.substring(6, 19)?.let { Date(it.toLong()) },
