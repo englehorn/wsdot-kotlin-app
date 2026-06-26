@@ -14,6 +14,7 @@ data class BridgeAlert(
     val roadName: String?,
     val direction: String?,
     val description: String,
+    val bridgeGroup: String?,
     val travelCenterPriorityId: Int?,
     val openingTime: Date?,
     val lastUpdatedTime: Date?,
