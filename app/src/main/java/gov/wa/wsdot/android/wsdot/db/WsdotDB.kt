@@ -24,8 +24,10 @@ import gov.wa.wsdot.android.wsdot.db.bordercrossing.BorderCrossing
 import gov.wa.wsdot.android.wsdot.db.bordercrossing.BorderCrossingDao
 import gov.wa.wsdot.android.wsdot.db.ferries.*
 import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPass
+import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassAlert
 import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassCameraTypeConverters
 import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassDao
+import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassAlertDao
 import gov.wa.wsdot.android.wsdot.db.notificationtopic.NotificationTopic
 import gov.wa.wsdot.android.wsdot.db.notificationtopic.NotificationTopicDao
 import gov.wa.wsdot.android.wsdot.db.socialmedia.Tweet
@@ -57,6 +59,7 @@ import gov.wa.wsdot.android.wsdot.db.traveltimes.TravelTimeDao
         Vessel::class,
         Camera::class,
         MountainPass::class,
+        MountainPassAlert::class,
         NewsRelease::class,
         TravelTime::class,
         FavoriteLocation::class,
@@ -101,6 +104,8 @@ abstract class WsdotDB : RoomDatabase() {
     abstract fun vesselDao(): VesselDao
 
     abstract fun mountainPassDao(): MountainPassDao
+
+    abstract fun mountainPassAlertDao(): MountainPassAlertDao
 
     abstract fun cameraDao(): CameraDao
 

@@ -20,6 +20,8 @@ import gov.wa.wsdot.android.wsdot.ui.cameras.CameraListViewModel
 import gov.wa.wsdot.android.wsdot.ui.common.SimpleFragmentPagerAdapter
 import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passCameras.PassCamerasListFragment
 import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passConditions.PassConditionsFragment
+import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passAlerts.MountainPassAlertsFragment
+import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passAlerts.MountainPassAlertsViewModel
 import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passForecast.PassForecastListFragment
 import gov.wa.wsdot.android.wsdot.util.autoCleared
 import javax.inject.Inject
@@ -31,6 +33,7 @@ class MountainPassReportFragment : DaggerFragment(), Injectable {
 
     lateinit var passReportViewModel: MountainPassReportViewModel
     lateinit var cameraListViewModel: CameraListViewModel
+    lateinit var mountainPassAlertsViewModel: MountainPassAlertsViewModel
 
     private var isFavorite: Boolean = false
 
@@ -74,6 +77,12 @@ class MountainPassReportFragment : DaggerFragment(), Injectable {
             ViewModelProvider(this, viewModelFactory).get(CameraListViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
+        // set alert route ID for pager fragment
+        mountainPassAlertsViewModel = activity?.run {
+            ViewModelProvider(this, viewModelFactory).get(MountainPassAlertsViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
+        mountainPassAlertsViewModel.setMountainPassAlertsQuery(args.passId)
+
         // create the data binding
         val dataBinding = DataBindingUtil.inflate<MountainPassReportFragmentBinding>(
             inflater,
@@ -92,11 +101,15 @@ class MountainPassReportFragment : DaggerFragment(), Injectable {
 
                 viewPager = dataBinding.root.findViewById(R.id.pager)
 
+
                 // only add the adapter if the view pager doesn't have one
                 // This prevents tabs from resetting when forecasts and favorite is updated
                 if (viewPager.adapter == null) {
-                    setupViewPager(viewPager, cameraIds.isNotEmpty(), pass.data.forecasts.isNotEmpty())
+                    setupViewPager(viewPager, cameraIds.isNotEmpty(), pass.data.forecasts.isNotEmpty(),
+                        pass.data.passId == 11)
                 }
+
+
 
                 val tabLayout: TabLayout = dataBinding.root.findViewById(R.id.tab_layout)
                 tabLayout.setupWithViewPager(viewPager)
@@ -109,6 +122,7 @@ class MountainPassReportFragment : DaggerFragment(), Injectable {
 
         return dataBinding.root
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.pass_menu, menu)
@@ -165,17 +179,19 @@ class MountainPassReportFragment : DaggerFragment(), Injectable {
     }
 
     // Add Fragments to Tabs
-    private fun setupViewPager(viewPager: ViewPager, withCameras: Boolean, withForecast: Boolean) {
+    private fun setupViewPager(viewPager: ViewPager, withCameras: Boolean, withForecast: Boolean, withAlert: Boolean) {
 
         val fragments = ArrayList<Fragment>()
         fragments.add(PassConditionsFragment())
         if (withCameras) { fragments.add(PassCamerasListFragment()) }
         if (withForecast) { fragments.add(PassForecastListFragment()) }
+        if (withAlert) { fragments.add(MountainPassAlertsFragment()) }
 
         val titles = ArrayList<String>()
-        titles.add("pass report")
+        titles.add("report")
         if (withCameras) { titles.add("cameras") }
         if (withForecast) { titles.add("forecast") }
+        if (withAlert) { titles.add("alerts") }
 
         fragmentPagerAdapter = SimpleFragmentPagerAdapter(childFragmentManager, fragments, titles)
 

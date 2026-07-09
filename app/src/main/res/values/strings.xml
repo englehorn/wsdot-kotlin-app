@@ -208,6 +208,13 @@
     <string name="push_alert_bridge_alert_title">bridge_alert_title_push_key</string>
     <string name="push_alert_bridge_alert_message">bridge_alert_message_push_key</string>
 
+    <string name="push_alert_pass_alert">pass_alert_push_key</string>
+    <string name="push_alert_pass_alert_id">pass_alert_id_push_key</string>
+    <string name="push_alert_pass_alert_pass_id">pass_alert_pass_id_push_key</string>
+    <string name="push_alert_pass_name">pass_alert_name_key</string>
+    <string name="push_alert_pass_alert_title">pass_alert_title_push_key</string>
+    <string name="push_alert_pass_alert_message">pass_alert_message_push_key</string>
+
     <string name="app_version_text">Version %s</string>
 
     // Shortcuts
@@ -237,6 +244,7 @@
     // notification channel
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="no_bridge_alerts_string">No Alerts Reported</string>
+    <string name="no_pass_alerts_string">No Alerts Reported</string>
 
     // Bridges
     <string name="_1st_avenue_south_bridge">1st Avenue South Bridge</string>

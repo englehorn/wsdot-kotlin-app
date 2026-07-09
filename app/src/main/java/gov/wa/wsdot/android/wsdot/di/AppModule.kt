@@ -13,6 +13,7 @@ import gov.wa.wsdot.android.wsdot.db.WsdotDB
 import gov.wa.wsdot.android.wsdot.db.bordercrossing.BorderCrossingDao
 import gov.wa.wsdot.android.wsdot.db.ferries.*
 import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassDao
+import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassAlertDao
 import gov.wa.wsdot.android.wsdot.db.notificationtopic.NotificationTopicDao
 import gov.wa.wsdot.android.wsdot.db.socialmedia.TweetDao
 import gov.wa.wsdot.android.wsdot.db.tollrates.constant.TollRateTableDao
@@ -136,6 +137,12 @@ class AppModule {
     @Provides
     fun provideMountainPassDao(db: WsdotDB): MountainPassDao {
         return db.mountainPassDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideMountainPassAlertDao(db: WsdotDB): MountainPassAlertDao {
+        return db.mountainPassAlertDao()
     }
 
     @Singleton

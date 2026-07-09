@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="gov.wa.wsdot.android.wsdot.model.common.Status"/>
+        <variable
+            name="passAlert"
+            type="gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassAlert"/>
+        <variable
+            name="viewModel"
+            type="gov.wa.wsdot.android.wsdot.ui.mountainpasses.MountainPassViewModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true">
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/CardTitleText"
+                        android:id="@+id/titleView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@{passAlert.eventCategoryTypeDescription}"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="@dimen/default_margin"
+                        android:layout_marginEnd="@dimen/default_margin"/>
+
+                    <TextView
+                        android:id="@+id/alertRoadName"
+                        style="@style/CardSubTitleBoldText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        app:bindRoadName="@{passAlert.roadName + @string/space + passAlert.roadDirection}"
+                        app:layout_constraintTop_toBottomOf="@id/titleView"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/alertTitle"
+                        style="@style/CardSubTitleText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        app:bindAlertHTML="@{passAlert.headlineMessage}"
+                        app:layout_constraintTop_toBottomOf="@id/alertRoadName"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/timestamp"
+                        style="@style/CardFooterText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:paddingBottom="16dp"
+                        app:bindRelativeDate="@{passAlert.createdDate}"
+                        app:layout_constraintTop_toBottomOf="@id/alertTitle"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <fragment
+                        xmlns:map="http://schemas.android.com/apk/res-auto"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:id="@+id/google_map"
+                        android:layout_height="300dp"
+                        android:layout_width="match_parent"
+                        app:layout_constraintTop_toBottomOf="@id/timestamp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        map:cameraZoom="12"
+                        map:mapType="normal"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    style="@style/Base.Widget.AppCompat.ProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:visibleGone="@{viewModel.alert.status == Status.LOADING}"
+                    android:indeterminate="true"
+                    android:layout_gravity="center"/>
+
+            </FrameLayout>
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+</layout>
