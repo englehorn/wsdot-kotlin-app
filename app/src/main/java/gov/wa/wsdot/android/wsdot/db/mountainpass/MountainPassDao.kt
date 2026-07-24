@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import gov.wa.wsdot.android.wsdot.api.response.mountainpass.MountainPassResponse.PassConditions.PassItem.PassCamera
 import gov.wa.wsdot.android.wsdot.api.response.mountainpass.MountainPassResponse.PassConditions.PassItem.PassForecast
+import gov.wa.wsdot.android.wsdot.api.response.mountainpass.MountainPassResponse.PassConditions.PassItem.PassAlerts
+
 import java.util.*
 
 @Dao
@@ -44,6 +46,7 @@ abstract class MountainPassDao {
                 pass.restrictionTwoDirection,
                 pass.cameras,
                 pass.forecasts,
+                pass.alerts,
                 pass.serverCacheDate,
                 pass.localCacheDate,
                 false)
@@ -71,6 +74,7 @@ abstract class MountainPassDao {
         restrictionTwoDirection = :restrictionTwoDirection,
         cameras = :cameras,
         forecasts = :forecasts,
+        alerts = :alerts,
         serverCacheDate = :serverCacheDate,
         localCacheDate = :localCacheDate,
         remove = :remove
@@ -92,6 +96,7 @@ abstract class MountainPassDao {
         restrictionTwoDirection: String,
         cameras: List<PassCamera>,
         forecasts: List<PassForecast>,
+        alerts: List<PassAlerts>?,
         serverCacheDate: Date,
         localCacheDate: Date,
         remove: Boolean)

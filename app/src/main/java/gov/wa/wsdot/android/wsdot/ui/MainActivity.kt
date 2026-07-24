@@ -498,6 +498,36 @@ class MainActivity : DaggerAppCompatActivity(), NavigationView.OnNavigationItemS
                 findNavController(R.id.nav_host_fragment).navigate(action)
 
             }
+
+            // Handles when app receives a PASS_ALERT type
+            extras.getBoolean(getString(R.string.push_alert_pass_alert), false) -> {
+
+                val navView: NavigationView = findViewById(R.id.drawer_nav_view)
+                navView.menu.findItem(R.id.nav_mountain_passes).isChecked = true
+
+                val alertId = extras.getInt(getString(R.string.push_alert_pass_alert_id), 0)
+                val passId = extras.getInt(getString(R.string.push_alert_pass_alert_pass_id), 0)
+                val passName = extras.getString(
+                    getString(R.string.push_alert_pass_name),
+                    ""
+                )
+
+                findNavController(R.id.nav_host_fragment).navigate(R.id.navMountainPassHomeFragment)
+                findNavController(R.id.nav_host_fragment).popBackStack(
+                    R.id.navMountainPassHomeFragment,
+                    false
+                )
+
+                val actionOne = NavGraphDirections.actionGlobalNavMountainPassReportFragment(
+                    passId,
+                    passName
+                )
+                findNavController(R.id.nav_host_fragment).navigate(actionOne)
+
+                val actionTwo = NavGraphDirections.actionGlobalNavMountainPassAlertFragment(alertId, passId, passName + " Alert")
+                findNavController(R.id.nav_host_fragment).navigate(actionTwo)
+
+            }
         }
 
         when {

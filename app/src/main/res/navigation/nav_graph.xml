@@ -528,6 +528,40 @@
     </fragment>
 
     <fragment
+        android:id="@+id/navMountainPassAlertDetailsFragment"
+        android:name="gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passAlerts.MountainPassAlertDetailsFragment"
+        android:label="{title}"
+        tools:layout="@layout/mountain_pass_alert_item" >
+        <argument
+            android:name="alert_id"
+            app:argType="integer" />
+        <argument
+            android:name="pass_id"
+            app:argType="integer" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue="Pass Alert"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navMountainPassAlertFragment"
+        android:name="gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passAlerts.MountainPassAlertFragment"
+        android:label="{title}"
+        tools:layout="@layout/mountain_pass_alert_item" >
+        <argument
+            android:name="alert_id"
+            app:argType="integer" />
+        <argument
+            android:name="pass_id"
+            app:argType="integer" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue="Pass Alert"/>
+    </fragment>
+
+    <fragment
         android:id="@+id/navVesselWatchFragment"
         android:name="gov.wa.wsdot.android.wsdot.ui.ferries.vesselwatch.VesselWatchFragment"
         android:label="Vessel Watch"
@@ -594,7 +628,7 @@
         <argument
             android:name="title"
             app:argType="string"
-            android:defaultValue="Route Details"/>
+            android:defaultValue="Mountain Pass"/>
     </fragment>
 
     <fragment
@@ -758,6 +792,23 @@
         app:exitAnim="@anim/nav_default_exit_anim"
         app:popEnterAnim="@anim/nav_default_pop_enter_anim"
         app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+    <action
+        android:id="@+id/action_global_navMountainPassAlertDetailsFragment"
+        app:destination="@id/navMountainPassAlertDetailsFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+    <action
+        android:id="@+id/action_global_navMountainPassAlertFragment"
+        app:destination="@id/navMountainPassAlertFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
 
     <action
         android:id="@+id/action_global_navWebViewFragment"

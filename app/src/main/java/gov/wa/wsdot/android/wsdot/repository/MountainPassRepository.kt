@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import gov.wa.wsdot.android.wsdot.api.WebDataService
 import gov.wa.wsdot.android.wsdot.api.response.mountainpass.MountainPassResponse
 import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPass
+import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassAlert
 import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassDao
+import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassAlertDao
 import gov.wa.wsdot.android.wsdot.util.AppExecutors
 import gov.wa.wsdot.android.wsdot.util.TimeUtils
 import gov.wa.wsdot.android.wsdot.model.common.NetworkBoundResource
@@ -18,7 +20,9 @@ import javax.inject.Singleton
 class MountainPassRepository @Inject constructor(
     private val dataWebservice: WebDataService,
     private val appExecutors: AppExecutors,
-    private val mountainPassDao: MountainPassDao
+    private val mountainPassDao: MountainPassDao,
+    private val mountainPassAlertDao: MountainPassAlertDao
+
 ) {
 
     fun loadPasses(forceRefresh: Boolean): LiveData<Resource<List<MountainPass>>> {
@@ -93,6 +97,64 @@ class MountainPassRepository @Inject constructor(
         }.asLiveData()
     }
 
+    fun loadMountainPassAlerts(passId: Int, forceRefresh: Boolean): LiveData<Resource<List<MountainPassAlert>>> {
+
+        return object : NetworkBoundResource<List<MountainPassAlert>, MountainPassResponse>(appExecutors) {
+
+            override fun saveCallResult(item: MountainPassResponse) = saveAlerts(item)
+
+            override fun shouldFetch(data: List<MountainPassAlert>?): Boolean {
+
+                if (forceRefresh) {
+                    return true
+                }
+
+                var update = false
+
+                if (data != null) {
+                    if (data.isEmpty()) {
+                        update = true
+                    }
+                } else {
+                    update = true
+                }
+
+                return update
+
+            }
+
+            override fun loadFromDb() = mountainPassAlertDao.loadAlertsById(passId)
+
+            override fun createCall() = dataWebservice.getMountainPassReports()
+
+            override fun onFetchFailed() {
+                //repoListRateLimit.reset(owner)
+            }
+
+        }.asLiveData()
+    }
+
+    fun loadMountainPassAlert(eventId: Int): LiveData<Resource<MountainPassAlert>> {
+
+        return object : NetworkBoundResource<MountainPassAlert, MountainPassResponse>(appExecutors) {
+
+            override fun saveCallResult(item: MountainPassResponse) = saveAlerts(item)
+
+            override fun shouldFetch(data: MountainPassAlert?): Boolean {
+                return true
+            }
+
+            override fun loadFromDb() = mountainPassAlertDao.loadAlertById(eventId)
+
+            override fun createCall() = dataWebservice.getMountainPassReports()
+
+            override fun onFetchFailed() {
+                //repoListRateLimit.reset(owner)
+            }
+
+        }.asLiveData()
+    }
+
     fun loadFavoritePasses(forceRefresh: Boolean): LiveData<Resource<List<MountainPass>>> {
 
         return object : NetworkBoundResource<List<MountainPass>, MountainPassResponse>(appExecutors) {
@@ -125,6 +187,35 @@ class MountainPassRepository @Inject constructor(
         }.asLiveData()
     }
 
+
+
+    private fun saveAlerts(passAlertsResponse: MountainPassResponse) {
+
+        val dbAlertList = arrayListOf<MountainPassAlert>()
+        
+        for (passAlertResponse in passAlertsResponse.passConditions.items) {
+            for (passAlertResponse in passAlertResponse.alerts!!) {
+                dbAlertList.add(MountainPassAlert(
+                    passAlertResponse.eventId,
+                    passAlertResponse.passId,
+                    passAlertResponse.mountainPass,
+                    passAlertResponse.travelCenterPriorityId,
+                    passAlertResponse.eventCategoryTypeDescription,
+                    passAlertResponse.headlineMessage,
+                    passAlertResponse.roadName,
+                    passAlertResponse.roadDirection,
+                    passAlertResponse.displayLatitude,
+                    passAlertResponse.displayLongitude,
+                    Date(passAlertResponse.createdDate.substring(6, 19).toLong())
+                ))
+            }
+
+        }
+
+        mountainPassAlertDao.updateAlerts(dbAlertList.distinct())
+
+    }
+
     private fun savePasses(passResponse: MountainPassResponse) {
 
         var dbPassList = arrayListOf<MountainPass>()
@@ -149,6 +240,7 @@ class MountainPassRepository @Inject constructor(
                 localCacheDate = Date(),
                 cameras = passItem.cameras,
                 forecasts = passItem.forecast,
+                alerts = passItem.alerts,
                 favorite = false,
                 remove = false
             )

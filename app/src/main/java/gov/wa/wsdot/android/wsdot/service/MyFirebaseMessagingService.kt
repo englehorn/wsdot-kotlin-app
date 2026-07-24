@@ -122,6 +122,21 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 intent.putExtra(getString(R.string.push_alert_bridge_alert_message), message)
 
             }
+            "pass_alert" -> {
+
+                val title = data["title"]
+                val message = data["message"]
+                val passId = data["pass_id"]
+                val passName = data["pass_name"]
+
+                intent.putExtra(getString(R.string.push_alert_pass_alert), true)
+                intent.putExtra(getString(R.string.push_alert_pass_alert_id), alertId?.toInt())
+                intent.putExtra(getString(R.string.push_alert_pass_alert_pass_id), passId?.toInt())
+                intent.putExtra(getString(R.string.push_alert_pass_name), passName)
+                intent.putExtra(getString(R.string.push_alert_pass_alert_title), title)
+                intent.putExtra(getString(R.string.push_alert_pass_alert_message), message)
+
+            }
         }
         return PendingIntent.getActivity(this, alertId?.toInt() ?: 0, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
@@ -145,6 +160,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
             "bridge_alert" -> {
                 channelId = MyNotificationManager.BRIDGE_CHANNEL_ID
+            }
+            "pass_alert" -> {
+                channelId = MyNotificationManager.PASS_CHANNEL_ID
             }
         }
 

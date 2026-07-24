@@ -3,6 +3,7 @@ package gov.wa.wsdot.android.wsdot.db.mountainpass
 import androidx.room.Entity
 import gov.wa.wsdot.android.wsdot.api.response.mountainpass.MountainPassResponse.PassConditions.PassItem.PassCamera
 import gov.wa.wsdot.android.wsdot.api.response.mountainpass.MountainPassResponse.PassConditions.PassItem.PassForecast
+import gov.wa.wsdot.android.wsdot.api.response.mountainpass.MountainPassResponse.PassConditions.PassItem.PassAlerts
 import java.util.*
 
 @Entity(primaryKeys = ["passId"])
@@ -24,6 +25,7 @@ data class MountainPass (
     val localCacheDate: Date,
     val cameras: List<PassCamera>,
     val forecasts: List<PassForecast>,
+    val alerts: List<PassAlerts>?,
     val favorite: Boolean,
     val remove: Boolean
 )

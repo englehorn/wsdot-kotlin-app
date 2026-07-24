@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import gov.wa.wsdot.android.wsdot.api.response.mountainpass.MountainPassResponse.PassConditions.PassItem.PassCamera
 import gov.wa.wsdot.android.wsdot.api.response.mountainpass.MountainPassResponse.PassConditions.PassItem.PassForecast
+import gov.wa.wsdot.android.wsdot.api.response.mountainpass.MountainPassResponse.PassConditions.PassItem.PassAlerts
 
 
 class MountainPassCameraTypeConverters {
@@ -30,4 +31,19 @@ class MountainPassCameraTypeConverters {
         return forecasts.toList()
     }
 
+    @TypeConverter
+    fun fromPassAlertList(passAlert: List<PassAlerts>): String {
+        return Gson().toJson(passAlert)
+    }
+
+    @TypeConverter
+    fun toPassAlertList(passAlertString: String?): List<PassAlerts> {
+        if (passAlertString != null) {
+            val alerts = Gson().fromJson(passAlertString, Array<PassAlerts>::class.java) as Array<PassAlerts>
+            return alerts.toList()
+        }
+        else {
+            return emptyList()
+        }
+    }
 }

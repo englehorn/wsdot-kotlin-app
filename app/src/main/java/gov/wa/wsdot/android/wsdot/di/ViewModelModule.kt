@@ -29,6 +29,8 @@ import gov.wa.wsdot.android.wsdot.ui.highwayAlerts.HighwayAlertViewModel
 import gov.wa.wsdot.android.wsdot.ui.highwayAlerts.HighwayAlertsViewModel
 import gov.wa.wsdot.android.wsdot.ui.mountainpasses.MountainPassViewModel
 import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.MountainPassReportViewModel
+import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passAlerts.MountainPassAlertDetailsViewModel
+import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passAlerts.MountainPassAlertsViewModel
 import gov.wa.wsdot.android.wsdot.ui.notifications.NotificationsViewModel
 import gov.wa.wsdot.android.wsdot.ui.socialmedia.TwitterViewModel
 import gov.wa.wsdot.android.wsdot.ui.tollrates.tollsigns.TollSignsViewModel
@@ -156,6 +158,17 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MountainPassReportViewModel::class)
     abstract fun bindMountainPassReportViewModel(mountainPassReportViewModel: MountainPassReportViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MountainPassAlertDetailsViewModel::class)
+    abstract fun bindMountainPassAlertDetailsViewModel(mountainPassAlertDetailsViewModel: MountainPassAlertDetailsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MountainPassAlertsViewModel::class)
+    abstract fun bindMountainPassAlertsViewModel(mountainPassAlertsViewModel: MountainPassAlertsViewModel): ViewModel
+
 
     @Binds
     @IntoMap

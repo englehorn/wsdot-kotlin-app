@@ -24,8 +24,10 @@ import gov.wa.wsdot.android.wsdot.db.bordercrossing.BorderCrossing
 import gov.wa.wsdot.android.wsdot.db.bordercrossing.BorderCrossingDao
 import gov.wa.wsdot.android.wsdot.db.ferries.*
 import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPass
+import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassAlert
 import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassCameraTypeConverters
 import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassDao
+import gov.wa.wsdot.android.wsdot.db.mountainpass.MountainPassAlertDao
 import gov.wa.wsdot.android.wsdot.db.notificationtopic.NotificationTopic
 import gov.wa.wsdot.android.wsdot.db.notificationtopic.NotificationTopicDao
 import gov.wa.wsdot.android.wsdot.db.socialmedia.Tweet
@@ -57,6 +59,7 @@ import gov.wa.wsdot.android.wsdot.db.traveltimes.TravelTimeDao
         Vessel::class,
         Camera::class,
         MountainPass::class,
+        MountainPassAlert::class,
         NewsRelease::class,
         TravelTime::class,
         FavoriteLocation::class,
@@ -66,16 +69,17 @@ import gov.wa.wsdot.android.wsdot.db.traveltimes.TravelTimeDao
         TollSign::class,
         NotificationTopic::class
     ],
-    version = 10,
+    version = 11,
     autoMigrations = [
-        AutoMigration (from = 2, to = 10),
-        AutoMigration (from = 3, to = 10),
-        AutoMigration (from = 4, to = 10),
-        AutoMigration (from = 5, to = 10),
-        AutoMigration (from = 6, to = 10),
-        AutoMigration (from = 7, to = 10),
-        AutoMigration (from = 8, to = 10),
-        AutoMigration (from = 9, to = 10)
+        AutoMigration (from = 2, to = 11),
+        AutoMigration (from = 3, to = 11),
+        AutoMigration (from = 4, to = 11),
+        AutoMigration (from = 5, to = 11),
+        AutoMigration (from = 6, to = 11),
+        AutoMigration (from = 7, to = 11),
+        AutoMigration (from = 8, to = 11),
+        AutoMigration (from = 9, to = 11),
+        AutoMigration (from = 10, to = 11)
     ],
     exportSchema = true
 )
@@ -101,6 +105,8 @@ abstract class WsdotDB : RoomDatabase() {
     abstract fun vesselDao(): VesselDao
 
     abstract fun mountainPassDao(): MountainPassDao
+
+    abstract fun mountainPassAlertDao(): MountainPassAlertDao
 
     abstract fun cameraDao(): CameraDao
 

@@ -42,8 +42,11 @@ import gov.wa.wsdot.android.wsdot.ui.ferries.vesselwatch.VesselWatchFragment
 import gov.wa.wsdot.android.wsdot.ui.highwayAlerts.HighwayAlertFragment
 import gov.wa.wsdot.android.wsdot.ui.mountainpasses.MountainPassHomeFragment
 import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.MountainPassReportFragment
+import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passAlerts.MountainPassAlertDetailsFragment
+import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passAlerts.MountainPassAlertFragment
 import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passCameras.PassCamerasListFragment
 import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passConditions.PassConditionsFragment
+import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passAlerts.MountainPassAlertsFragment
 import gov.wa.wsdot.android.wsdot.ui.mountainpasses.report.passForecast.PassForecastListFragment
 import gov.wa.wsdot.android.wsdot.ui.notifications.NotificationDetailsFragment
 import gov.wa.wsdot.android.wsdot.ui.notifications.NotificationsFragment
@@ -138,6 +141,15 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeMountainPassReportFragment(): MountainPassReportFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeMountainPassAlertsListFragmentFragment(): MountainPassAlertsFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeMountainPassAlertDetailsFragment(): MountainPassAlertDetailsFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeMountainPassAlertFragment(): MountainPassAlertFragment
 
     @ContributesAndroidInjector
     abstract fun contributePassConditionsFragment(): PassConditionsFragment

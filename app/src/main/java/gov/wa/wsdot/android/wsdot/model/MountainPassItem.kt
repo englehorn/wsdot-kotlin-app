@@ -22,6 +22,7 @@ class MountainPassItem (
     var localCacheDate: Date,
     var cameras: List<MountainPassResponse.PassConditions.PassItem.PassCamera>,
     var forecasts: List<MountainPassResponse.PassConditions.PassItem.PassForecast>,
+    var alerts: List<MountainPassResponse.PassConditions.PassItem.PassAlerts>?,
     var favorite: Boolean,
     var remove: Boolean
 )
